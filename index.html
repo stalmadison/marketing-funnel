@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marketing Funnel Visualization</title>
+    <style>
+        /* We'll add CSS here */
+        body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .step {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .step label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #add-step {
+            margin-right: 10px;
+        }
+        #funnel-visualization {
+            max-width: 600px;
+            margin: 30px auto;
+        }
+        /* Container for each step */
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* Label above each bar */
+        .label-div {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Funnel step (colored bar) */
+        .funnel-step {
+            height: 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+        <h1>Marketing Funnel Visualization</h1>
+        <form id="funnel-form">
+            <div id="steps-container">
+                <!-- Step 1 -->
+                <div class="step">
+                    <label>
+                        Step Name:
+                        <input type="text" name="step-name" required>
+                    </label>
+                    <label>
+                        Metric:
+                        <input type="number" name="step-metric" required>
+                    </label>
+                    <label>
+                        Color:
+                        <input type="color" name="step-color" value="#ff0000">
+                    </label>
+                </div>
+                <!-- Repeat this block 4 more times for steps 2 to 5 --><!-- Step 1 -->
+                <div class="step">
+                    <label>
+                        Step Name:
+                        <input type="text" name="step-name" required>
+                    </label>
+                    <label>
+                        Metric:
+                        <input type="number" name="step-metric" required>
+                    </label>
+                    <label>
+                        Color:
+                        <input type="color" name="step-color" value="#ff0000">
+                    </label>
+                </div>
+                <!-- Repeat this block 4 more times for steps 2 to 5 --><!-- Step 1 -->
+                <div class="step">
+                    <label>
+                        Step Name:
+                        <input type="text" name="step-name" required>
+                    </label>
+                    <label>
+                        Metric:
+                        <input type="number" name="step-metric" required>
+                    </label>
+                    <label>
+                        Color:
+                        <input type="color" name="step-color" value="#ff0000">
+                    </label>
+                </div>
+                <!-- Repeat this block 4 more times for steps 2 to 5 --><!-- Step 1 -->
+                <div class="step">
+                    <label>
+                        Step Name:
+                        <input type="text" name="step-name" required>
+                    </label>
+                    <label>
+                        Metric:
+                        <input type="number" name="step-metric" required>
+                    </label>
+                    <label>
+                        Color:
+                        <input type="color" name="step-color" value="#ff0000">
+                    </label>
+                </div>
+                <!-- Repeat this block 4 more times for steps 2 to 5 --><!-- Step 1 -->
+                <div class="step">
+                    <label>
+                        Step Name:
+                        <input type="text" name="step-name" required>
+                    </label>
+                    <label>
+                        Metric:
+                        <input type="number" name="step-metric" required>
+                    </label>
+                    <label>
+                        Color:
+                        <input type="color" name="step-color" value="#ff0000">
+                    </label>
+            </div>
+            <!-- Repeat this block 4 more times for steps 2 to 5 -->
+            </div>
+            <button type="button" id="add-step">Add Step</button>
+            <button type="submit">Visualize Funnel</button>
+        </form>
+        <!-- We'll add the visualization here -->
+        <script>
+            // Function to visualize the funnel
+            function visualizeFunnel(event) {
+                event.preventDefault(); // Prevent form from submitting
+        
+                // Get all the steps
+                const stepNames = document.querySelectorAll('input[name="step-name"]');
+                const stepMetrics = document.querySelectorAll('input[name="step-metric"]');
+                const stepColors = document.querySelectorAll('input[name="step-color"]');
+        
+                // Prepare data
+                let funnelData = [];
+                for (let i = 0; i < stepNames.length; i++) {
+                    funnelData.push({
+                        name: stepNames[i].value,
+                        metric: parseFloat(stepMetrics[i].value),
+                        color: stepColors[i].value
+                    });
+                }
+        
+                // Sort data if needed, or process it
+                // For now, we'll keep it as is
+        
+                // Create visualization
+                displayFunnel(funnelData);
+            }
+        
+            // Function to display the funnel
+            function displayFunnel(data) {
+                // Remove previous visualization if any
+                const oldViz = document.getElementById('funnel-visualization');
+                if (oldViz) {
+                    oldViz.remove();
+                }
+
+                // Create a container
+                const vizContainer = document.createElement('div');
+                vizContainer.id = 'funnel-visualization';
+
+                // Calculate maximum metric for scaling
+                const maxMetric = Math.max(...data.map(step => step.metric));
+
+                data.forEach(step => {
+                    // Create a container for each step
+                    const stepContainer = document.createElement('div');
+                    stepContainer.className = 'step-container';
+
+                    // Create the label
+                    const labelDiv = document.createElement('div');
+                    labelDiv.className = 'label-div';
+                    labelDiv.textContent = `${step.name}: ${step.metric}`;
+
+                    // Create the colored bar
+                    const stepDiv = document.createElement('div');
+                    stepDiv.className = 'funnel-step';
+                    stepDiv.style.width = (step.metric / maxMetric * 100) + '%';
+                    stepDiv.style.backgroundColor = step.color;
+
+                    // Append label and bar to the step container
+                    stepContainer.appendChild(labelDiv);
+                    stepContainer.appendChild(stepDiv);
+
+                    // Append the step container to the visualization container
+                    vizContainer.appendChild(stepContainer);
+                });
+
+                // Append to body or a specific container
+                document.body.appendChild(vizContainer);
+}
+        
+            // Event listener for form submission
+            document.getElementById('funnel-form').addEventListener('submit', visualizeFunnel);
+        
+            // Function to add new steps
+            function addStep() {
+                const stepsContainer = document.getElementById('steps-container');
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step';
+                stepDiv.innerHTML = `
+                    <label>
+                        Step Name:
+                        <input type="text" name="step-name" required>
+                    </label>
+                    <label>
+                        Metric:
+                        <input type="number" name="step-metric" required>
+                    </label>
+                    <label>
+                        Color:
+                        <input type="color" name="step-color" value="#ff0000">
+                    </label>
+                    <button type="button" class="remove-step">Remove Step</button>
+                `;
+                stepsContainer.appendChild(stepDiv);
+        
+                // Add event listener to the remove button
+                stepDiv.querySelector('.remove-step').addEventListener('click', () => {
+                    stepDiv.remove();
+                });
+            }
+        
+            // Event listener for adding steps
+            document.getElementById('add-step').addEventListener('click', addStep);
+        
+            // Add remove buttons to initial steps
+            const initialSteps = document.querySelectorAll('.step');
+            initialSteps.forEach(step => {
+                const removeButton = document.createElement('button');
+                removeButton.type = 'button';
+                removeButton.className = 'remove-step';
+                removeButton.textContent = 'Remove Step';
+                step.appendChild(removeButton);
+        
+                removeButton.addEventListener('click', () => {
+                    step.remove();
+                });
+            });
+        </script>
+</body>
+</html>
